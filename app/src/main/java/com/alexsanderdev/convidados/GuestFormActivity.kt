@@ -44,9 +44,9 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
                 binding.radioAbsent.isChecked = true
             }
         }
-        viewModel.saveGuest.observe(this) {
-            if (it.success) {
-                Toast.makeText(applicationContext, it.message, Toast.LENGTH_SHORT).show()
+        viewModel.saveGuest.observe(this) { result ->
+            Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
+            if (result.success) {
                 finish()
             }
         }
@@ -56,7 +56,11 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
         if (v.id == R.id.fab_salvar) {
             val name = binding.editName.text.toString()
             val presence = binding.radioPresent.isChecked
-            val model = GuestModel(guestId, name, presence)
+            val model = GuestModel().apply {
+                this.id = guestId
+                this.name = name
+                this.presence = presence
+            }
             viewModel.save(model)
             finish()
         }

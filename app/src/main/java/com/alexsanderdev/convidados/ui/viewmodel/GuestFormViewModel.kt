@@ -15,24 +15,21 @@ import com.alexsanderdev.convidados.model.SuccessOrFailure
 import com.alexsanderdev.convidados.repository.GuestRepository
 
 class GuestFormViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository = GuestRepository.getInstance(application)
+    private val repository = GuestRepository(application)
     private val guestModel = MutableLiveData<GuestModel>()
     val guest: LiveData<GuestModel> = guestModel
 
-    private val _saveGuest = MutableLiveData<SuccessOrFailure>()
-    val saveGuest: LiveData<SuccessOrFailure> = _saveGuest
+    private val saveGuestLiveData = MutableLiveData<SuccessOrFailure>()
+    val saveGuest: LiveData<SuccessOrFailure> = saveGuestLiveData
 
     fun save(guest: GuestModel) {
-        val successOrFailure = SuccessOrFailure(true, "")
-        if (guest.id == 0) {
-            successOrFailure.success = repository.insert(guest)
+        val success: Boolean = if (guest.id == 0) {
+            repository.insert(guest)
         } else {
-            successOrFailure.success = repository.update(guest)
+            repository.update(guest)
         }
-    }
-
-    fun update(guest: GuestModel) {
-        repository.update(guest)
+        val successOrFailure = SuccessOrFailure(success, guest.id == 0)
+        saveGuestLiveData.value = successOrFailure
     }
 
     fun get(id: Int) {

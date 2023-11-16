@@ -25,7 +25,7 @@ class GuestViewHolder(private val bind: RowGuestBinding, private val listener: O
         bind.textName.setOnLongClickListener {
             AlertDialog.Builder(itemView.context).setTitle("Remoção de convidado")
                 .setMessage("Tem certeza que deseja remover o convidado?")
-                .setPositiveButton("Sim") { dialog, which -> listener.onDelete(guest.id) }
+                .setPositiveButton("Sim") { _, _ -> listener.onDelete(guest.id) }
                 .setNegativeButton("Não", null)
                 .create().show()
             true

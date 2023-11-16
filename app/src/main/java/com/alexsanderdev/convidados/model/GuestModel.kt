@@ -23,3 +23,6 @@ class GuestModel {
     @ColumnInfo(name = "presence")
     var presence: Boolean = false
 }
+
+
+
